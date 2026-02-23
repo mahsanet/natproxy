@@ -41,16 +41,22 @@ jobs:
         run: |
           go install golang.org/x/mobile/cmd/gomobile@latest
           gomobile init
+      
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      
+      - name: Verify sdkmanager
+        run: sdkmanager --version
 
       - name: Setup Android NDK
         run: |
-          yes | sdkmanager --install "ndk;${{ env.NDK_VERSION }}" || true
+          yes | sdkmanager --install "ndk;${{ env.NDK_VERSION }}"
           echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> "$GITHUB_ENV"
 
-      - name: Inject .env from secret
-        run: |
-          echo "${{ secrets.DOT_ENV }}" > .env
-          dart run scripts/apply_env.dart
+      # - name: Inject .env from secret
+      #   run: |
+      #     echo "${{ secrets.DOT_ENV }}" > .env
+      #     dart run scripts/apply_env.dart
 
       - name: Decode release keystore
         run: |
@@ -75,19 +81,18 @@ jobs:
             -o ../android/app/libs/golib.aar ./
 
       - name: Build split APKs
-        run: flutter build apk --split-per-abi
-
-      - name: Build universal APK
-        run: flutter build apk
-
-      - name: Rename APKs
         run: |
           TAG="${GITHUB_REF_NAME}"
           mkdir -p release-apks
+          flutter build apk --split-per-abi
           cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk    "release-apks/natproxy-${TAG}-arm64-v8a.apk"
           cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk  "release-apks/natproxy-${TAG}-armeabi-v7a.apk"
           cp build/app/outputs/flutter-apk/app-x86_64-release.apk       "release-apks/natproxy-${TAG}-x86_64.apk"
-          cp build/app/outputs/flutter-apk/app-x86-release.apk          "release-apks/natproxy-${TAG}-x86.apk"
+
+      - name: Build universal APK
+        run: |
+          flutter build apk
+          TAG="${GITHUB_REF_NAME}"
           cp build/app/outputs/flutter-apk/app-release.apk              "release-apks/natproxy-${TAG}-universal.apk"
 
       - name: Upload APK artifacts
@@ -146,10 +151,16 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      
+      - name: Verify sdkmanager
+        run: sdkmanager --version
+
       - name: Setup Android NDK
         if: matrix.goos == 'android'
         run: |
-          yes | sdkmanager --install "ndk;${{ env.NDK_VERSION }}" || true
+          yes | sdkmanager --install "ndk;${{ env.NDK_VERSION }}"
           echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> "$GITHUB_ENV"
 
       - name: Cross-compile natproxy-cli
@@ -168,7 +179,7 @@ jobs:
 
           cd natproxy-cli
           go build -trimpath \
-            -ldflags "-s -w -X natproxy/cli/cmd.Version=${TAG} -X natproxy/cli/cmd.Commit=${SHA}" \
+            -ldflags "-checklinkname=0 -s -w -X natproxy/cli/cmd.Version=${TAG} -X natproxy/cli/cmd.Commit=${SHA}" \
             -o "natproxy-cli${{ matrix.ext }}" .
 
       - name: Create zip and digest
@@ -235,10 +246,16 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      
+      - name: Verify sdkmanager
+        run: sdkmanager --version
+
       - name: Setup Android NDK
         if: matrix.goos == 'android'
         run: |
-          yes | sdkmanager --install "ndk;${{ env.NDK_VERSION }}" || true
+          yes | sdkmanager --install "ndk;${{ env.NDK_VERSION }}"
           echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> "$GITHUB_ENV"
 
       - name: Cross-compile signaling-server
