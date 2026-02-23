@@ -54,10 +54,10 @@ jobs:
           yes | sdkmanager --install "ndk;${{ env.NDK_VERSION }}"
           echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> "$GITHUB_ENV"
 
-      - name: Inject .env from secret
-        run: |
-          echo "${{ secrets.DOT_ENV }}" > .env
-          dart run scripts/apply_env.dart
+      # - name: Inject .env from secret
+      #   run: |
+      #     echo "${{ secrets.DOT_ENV }}" > .env
+      #     dart run scripts/apply_env.dart
 
       - name: Decode release keystore
         run: |
