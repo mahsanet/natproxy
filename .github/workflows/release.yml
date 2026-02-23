@@ -44,7 +44,7 @@ jobs:
 
       - name: Setup Android NDK
         run: |
-          yes | sdkmanager --install "ndk;${{ env.NDK_VERSION }}" || true
+          yes | sdkmanager --install "ndk;${{ env.NDK_VERSION }}"
           echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> "$GITHUB_ENV"
 
       - name: Inject .env from secret
