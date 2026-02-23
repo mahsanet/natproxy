@@ -181,7 +181,7 @@ jobs:
 
           cd natproxy-cli
           go build -trimpath \
-            -ldflags "-s -w -X natproxy/cli/cmd.Version=${TAG} -X natproxy/cli/cmd.Commit=${SHA}" \
+            -ldflags "-checklinkname=0 -s -w -X natproxy/cli/cmd.Version=${TAG} -X natproxy/cli/cmd.Commit=${SHA}" \
             -o "natproxy-cli${{ matrix.ext }}" .
 
       - name: Create zip and digest
