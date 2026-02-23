@@ -193,7 +193,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: cli-${{ matrix.name }}|
+          name: cli-${{ matrix.name }}
           path: |
             natproxy-cli/natproxy-cli-${{ matrix.name }}.zip
             natproxy-cli/natproxy-cli-${{ matrix.name }}.zip.dgst
