@@ -153,10 +153,16 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      
+      - name: Verify sdkmanager
+        run: sdkmanager --version
+
       - name: Setup Android NDK
         if: matrix.goos == 'android'
         run: |
-          yes | sdkmanager --install "ndk;${{ env.NDK_VERSION }}" || true
+          yes | sdkmanager --install "ndk;${{ env.NDK_VERSION }}"
           echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> "$GITHUB_ENV"
 
       - name: Cross-compile natproxy-cli
@@ -187,7 +193,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: cli-${{ matrix.name }}
+          name: cli-${{ matrix.name }}|
           path: |
             natproxy-cli/natproxy-cli-${{ matrix.name }}.zip
             natproxy-cli/natproxy-cli-${{ matrix.name }}.zip.dgst
@@ -242,10 +248,16 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      
+      - name: Verify sdkmanager
+        run: sdkmanager --version
+
       - name: Setup Android NDK
         if: matrix.goos == 'android'
         run: |
-          yes | sdkmanager --install "ndk;${{ env.NDK_VERSION }}" || true
+          yes | sdkmanager --install "ndk;${{ env.NDK_VERSION }}"
           echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> "$GITHUB_ENV"
 
       - name: Cross-compile signaling-server
