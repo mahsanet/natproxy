@@ -82,20 +82,19 @@ jobs:
             -o ../android/app/libs/golib.aar ./
 
       - name: Build split APKs
-        run: flutter build apk --split-per-abi
-
-      - name: Build universal APK
-        run: flutter build apk
-
-      - name: Rename APKs
         run: |
           TAG="${GITHUB_REF_NAME}"
           mkdir -p release-apks
+          flutter build apk --split-per-abi
           cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk    "release-apks/natproxy-${TAG}-arm64-v8a.apk"
           cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk  "release-apks/natproxy-${TAG}-armeabi-v7a.apk"
           cp build/app/outputs/flutter-apk/app-x86_64-release.apk       "release-apks/natproxy-${TAG}-x86_64.apk"
-          cp build/app/outputs/flutter-apk/app-x86-release.apk          "release-apks/natproxy-${TAG}-x86.apk"
-          cp build/app/outputs/flutter-apk/app-release.apk              "release-apks/natproxy-${TAG}-universal.apk"
+
+      - name: Build universal APK
+        run: |
+          flutter build apk
+          TAG="${GITHUB_REF_NAME}"
+          cp build/app/outputs/flutter-apk/app-release.apk              "release-apks/***-${TAG}-universal.apk"
 
       - name: Upload APK artifacts
         uses: actions/upload-artifact@v4
