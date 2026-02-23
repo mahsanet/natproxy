@@ -94,7 +94,7 @@ jobs:
         run: |
           flutter build apk
           TAG="${GITHUB_REF_NAME}"
-          cp build/app/outputs/flutter-apk/app-release.apk              "release-apks/***-${TAG}-universal.apk"
+          cp build/app/outputs/flutter-apk/app-release.apk              "release-apks/natproxy-${TAG}-universal.apk"
 
       - name: Upload APK artifacts
         uses: actions/upload-artifact@v4
