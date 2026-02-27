@@ -169,7 +169,7 @@ func buildServerConfig(cmd *cobra.Command) types.ServerConfig {
 		DiscoveryName:       viper.GetString("server.discovery.name"),
 		DiscoveryRoom:       viper.GetString("server.discovery.room"),
 		TransportMode:       viper.GetString("server.transport_mode"),
-		Obfuscation:         viper.GetBool("server.obfuscation"),
+		Obfuscation:         !viper.GetBool("server.no_obfuscation"),
 		DisableIPv6:         viper.GetBool("server.disable_ipv6"),
 		RateLimitUp:          viper.GetInt64("server.rate_limit_up") * 1024, // KB/s → bytes/s
 		RateLimitDown:        viper.GetInt64("server.rate_limit_down") * 1024,
@@ -248,7 +248,7 @@ func init() {
 
 	// WebRTC Transport
 	f.String("transport-mode", "", "datachannel|media (default datachannel)")
-	f.Bool("obfuscation", true, "Enable UDP obfuscation for DPI resistance (default true)")
+	f.Bool("no-obfuscation", false, "Disable UDP obfuscation (obfuscation is ON by default)")
 	f.Bool("disable-ipv6", false, "Disable IPv6 ICE candidates")
 	f.Int64("rate-limit-up", 0, "Upload rate limit in KB/s (0=unlimited)")
 	f.Int64("rate-limit-down", 0, "Download rate limit in KB/s (0=unlimited)")
@@ -325,7 +325,7 @@ func init() {
 	viper.BindPFlag("server.xhttp.host", f.Lookup("xhttp-host"))
 	viper.BindPFlag("server.xhttp.mode", f.Lookup("xhttp-mode"))
 	viper.BindPFlag("server.transport_mode", f.Lookup("transport-mode"))
-	viper.BindPFlag("server.obfuscation", f.Lookup("obfuscation"))
+	viper.BindPFlag("server.no_obfuscation", f.Lookup("no-obfuscation"))
 	viper.BindPFlag("server.disable_ipv6", f.Lookup("disable-ipv6"))
 	viper.BindPFlag("server.rate_limit_up", f.Lookup("rate-limit-up"))
 	viper.BindPFlag("server.rate_limit_down", f.Lookup("rate-limit-down"))
