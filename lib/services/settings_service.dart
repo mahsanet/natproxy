@@ -96,6 +96,9 @@ class SettingsService {
       transportMode:
           prefs.getString('server_transportMode') ??
           ServerSettings.defaultTransportMode,
+      obfuscation:
+          prefs.getBool('server_obfuscation') ??
+          ServerSettings.defaultObfuscation,
       disableIPv6:
           prefs.getBool('server_disableIPv6') ??
           ServerSettings.defaultDisableIPv6,
@@ -223,6 +226,7 @@ class SettingsService {
     await prefs.setInt('server_ssdpTimeout', settings.ssdpTimeout);
     await prefs.setBool('server_useRelay', settings.useRelay);
     await prefs.setString('server_transportMode', settings.transportMode);
+    await prefs.setBool('server_obfuscation', settings.obfuscation);
     await prefs.setBool('server_disableIPv6', settings.disableIPv6);
     await prefs.setInt('server_rateLimitUp', settings.rateLimitUp);
     await prefs.setInt('server_rateLimitDown', settings.rateLimitDown);

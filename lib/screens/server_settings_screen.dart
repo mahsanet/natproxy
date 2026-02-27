@@ -69,6 +69,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
   String _finalMaskType = ServerSettings.defaultFinalMaskType;
   bool _useRelay = ServerSettings.defaultUseRelay;
   String _transportMode = ServerSettings.defaultTransportMode;
+  bool _obfuscation = ServerSettings.defaultObfuscation;
   bool _disableIPv6 = ServerSettings.defaultDisableIPv6;
   bool _paddingEnabled = ServerSettings.defaultPaddingEnabled;
   bool _dtlsSkipVerify = ServerSettings.defaultDtlsSkipVerify;
@@ -200,6 +201,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
           ServerSettings.defaultSsdpTimeout,
       useRelay: _useRelay,
       transportMode: _transportMode,
+      obfuscation: _obfuscation,
       disableIPv6: _disableIPv6,
       rateLimitUp:
           (int.tryParse(_rateLimitUpController.text.trim()) ?? 0) * 1024,
@@ -311,6 +313,7 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
 
       _useRelay = settings.useRelay;
       _transportMode = settings.transportMode;
+      _obfuscation = settings.obfuscation;
       _disableIPv6 = settings.disableIPv6;
       _rateLimitUpController.text = settings.rateLimitUp > 0
           ? (settings.rateLimitUp ~/ 1024).toString()
@@ -826,6 +829,16 @@ class _ServerSettingsScreenState extends State<ServerSettingsScreen> {
                             ? 'Disguises traffic as a video call (harder to detect)'
                             : 'Standard WebRTC data channel transport',
                         style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      SwitchListTile(
+                        title: const Text('UDP Obfuscation'),
+                        subtitle: const Text(
+                          'Encrypt all UDP traffic with AES-256-GCM to defeat DPI',
+                        ),
+                        value: _obfuscation,
+                        onChanged: (value) =>
+                            setState(() => _obfuscation = value),
+                        contentPadding: EdgeInsets.zero,
                       ),
                       SwitchListTile(
                         title: const Text('Disable IPv6'),

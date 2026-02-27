@@ -44,6 +44,7 @@ type ServerConfig struct {
 
 	// WebRTC transport
 	TransportMode string `json:"transportMode"` // "datachannel" or "media"
+	Obfuscation   bool   `json:"obfuscation"`   // UDP obfuscation (default true)
 	DisableIPv6   bool   `json:"disableIPv6"`
 	RateLimitUp   int64  `json:"rateLimitUp"`
 	RateLimitDown int64  `json:"rateLimitDown"`

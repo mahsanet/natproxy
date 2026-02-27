@@ -234,6 +234,7 @@ type serverConfig struct {
 	NumPeerConnections int    `json:"numPeerConnections"` // parallel PeerConnections (default 1)
 	TransportMode      string `json:"transportMode"`      // "datachannel" or "media"
 	DisableIPv6        bool   `json:"disableIPv6"`
+	Obfuscation        *bool  `json:"obfuscation"`        // enable UDP obfuscation (default true)
 
 	// WebRTC performance tuning
 	NumChannels          int  `json:"numChannels"`          // parallel data channels (default 6)
@@ -466,11 +467,16 @@ func StartServer(settingsJSON string) (string, error) {
 	}
 
 	// Generate obfuscation key for DPI resistance (32 bytes → AES-256-GCM)
-	obfsKey := make([]byte, 32)
-	if _, err := crypto_rand.Read(obfsKey); err != nil {
-		return "", fmt.Errorf("generate obfs key: %w", err)
+	var obfsKey []byte
+	if cfg.Obfuscation == nil || *cfg.Obfuscation {
+		obfsKey = make([]byte, 32)
+		if _, err := crypto_rand.Read(obfsKey); err != nil {
+			return "", fmt.Errorf("generate obfs key: %w", err)
+		}
+		applog.Info("Generated UDP obfuscation key for WebRTC path (AES-256-GCM)")
+	} else {
+		applog.Info("UDP obfuscation disabled by config")
 	}
-	applog.Info("Generated UDP obfuscation key for WebRTC path (AES-256-GCM)")
 
 	sessionID := generateUUID()
 	applog.Infof("Holepunch session ID: %s", sessionID)
@@ -1073,11 +1079,16 @@ func StartServerManual(settingsJSON string) (string, error) {
 	}
 
 	// Generate obfuscation key (32 bytes → AES-256-GCM)
-	obfsKey := make([]byte, 32)
-	if _, err := crypto_rand.Read(obfsKey); err != nil {
-		return "", fmt.Errorf("generate obfs key: %w", err)
+	var obfsKey []byte
+	if cfg.Obfuscation == nil || *cfg.Obfuscation {
+		obfsKey = make([]byte, 32)
+		if _, err := crypto_rand.Read(obfsKey); err != nil {
+			return "", fmt.Errorf("generate obfs key: %w", err)
+		}
+		applog.Info("Manual: generated UDP obfuscation key (AES-256-GCM)")
+	} else {
+		applog.Info("Manual: UDP obfuscation disabled by config")
 	}
-	applog.Info("Manual: generated UDP obfuscation key (AES-256-GCM)")
 
 	sessionID := generateUUID()
 

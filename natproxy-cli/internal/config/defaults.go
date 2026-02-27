@@ -35,6 +35,7 @@ func DefaultServerConfig() types.ServerConfig {
 		UpnpRetries:         3,
 		SsdpTimeout:         3,
 		DiscoveryEnabled:     true,
+		Obfuscation:          true,
 		PaddingEnabled:       false,
 		PaddingMax:           256,
 		NumPeerConnections:   6,

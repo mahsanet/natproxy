@@ -34,6 +34,7 @@ class ServerSettings {
 
   // WebRTC Transport
   static const defaultTransportMode = 'datachannel';
+  static const defaultObfuscation = true;
   static const defaultDisableIPv6 = false;
   static const defaultRateLimitUp = 0;
   static const defaultRateLimitDown = 0;
@@ -120,6 +121,7 @@ class ServerSettings {
 
   // WebRTC Transport
   final String transportMode; // 'datachannel' or 'media'
+  final bool obfuscation;
   final bool disableIPv6;
   final int rateLimitUp; // bytes/sec, 0 = unlimited
   final int rateLimitDown; // bytes/sec, 0 = unlimited
@@ -191,6 +193,7 @@ class ServerSettings {
     this.ssdpTimeout = defaultSsdpTimeout,
     this.useRelay = defaultUseRelay,
     this.transportMode = defaultTransportMode,
+    this.obfuscation = defaultObfuscation,
     this.disableIPv6 = defaultDisableIPv6,
     this.rateLimitUp = defaultRateLimitUp,
     this.rateLimitDown = defaultRateLimitDown,
@@ -253,6 +256,7 @@ class ServerSettings {
     int? ssdpTimeout,
     bool? useRelay,
     String? transportMode,
+    bool? obfuscation,
     bool? disableIPv6,
     int? rateLimitUp,
     int? rateLimitDown,
@@ -314,6 +318,7 @@ class ServerSettings {
       ssdpTimeout: ssdpTimeout ?? this.ssdpTimeout,
       useRelay: useRelay ?? this.useRelay,
       transportMode: transportMode ?? this.transportMode,
+      obfuscation: obfuscation ?? this.obfuscation,
       disableIPv6: disableIPv6 ?? this.disableIPv6,
       rateLimitUp: rateLimitUp ?? this.rateLimitUp,
       rateLimitDown: rateLimitDown ?? this.rateLimitDown,
@@ -374,6 +379,7 @@ class ServerSettings {
     'ssdpTimeout': ssdpTimeout,
     'useRelay': useRelay,
     'transportMode': transportMode,
+    'obfuscation': obfuscation,
     'disableIPv6': disableIPv6,
     'rateLimitUp': rateLimitUp,
     'rateLimitDown': rateLimitDown,
@@ -446,6 +452,7 @@ class ServerSettings {
       useRelay: json['useRelay'] as bool? ?? defaultUseRelay,
       transportMode:
           json['transportMode'] as String? ?? defaultTransportMode,
+      obfuscation: json['obfuscation'] as bool? ?? defaultObfuscation,
       disableIPv6: json['disableIPv6'] as bool? ?? defaultDisableIPv6,
       rateLimitUp: json['rateLimitUp'] as int? ?? defaultRateLimitUp,
       rateLimitDown: json['rateLimitDown'] as int? ?? defaultRateLimitDown,
